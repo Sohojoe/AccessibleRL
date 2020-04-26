@@ -8,7 +8,9 @@ So, this site uses a couple of tricks:
 
 1. Writing out formula phonetically. For example:
 
-$G_t$ \equiv
+$$
+G_t \doteq R_{t+1} + R_{t+2} + R_{t+3} + ... + R_{T}
+$$
 
 (G at timestep t, is equivalent to, R, at t+1, +, R, at t+2, + R, at t+3, +, etc)
 
