@@ -24,7 +24,7 @@ A couple of exciting news in Artificial Intelligence (AI) has just happened in r
 Say, we have an agent in an unknown environment and this agent can obtain some rewards by interacting with the environment. The agent ought to take actions so as to maximize cumulative rewards. In reality, the scenario could be a bot playing a game to achieve high scores, or a robot trying to complete physical tasks with physical items; and not just limited to these.
 
 
-![Illustration of a reinforcement learning problem]({{ '/assets/images/RL_illustration.png' | relative_url }})
+![Illustration of a reinforcement learning problem](https://raw.githubusercontent.com/lilianweng/lil-log/master/assets/images/RL_illustration.png)
 {: style="width: 70%;" class="center"}
 *Fig. 1. An agent interacts with the environment, trying to take smart actions to maximize cumulative rewards.*
 
