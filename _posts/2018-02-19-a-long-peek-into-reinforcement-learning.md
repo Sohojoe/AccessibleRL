@@ -10,8 +10,46 @@ image: "RL_illustration.png"
 > In this post, we are gonna briefly go over the field of Reinforcement Learning (RL), from fundamental concepts to classic algorithms. Hopefully, this review is helpful enough so that newbies would not get lost in specialized terms and jargons while starting. [WARNING] This is a long read.
 
 <!--more-->
+<!-- TOC -->
 
-{toc}
+- [What is Reinforcement Learning?](#what-is-reinforcement-learning)
+    - [Key Concepts](#key-concepts)
+        - [Model: Transition and Reward](#model-transition-and-reward)
+        - [Policy](#policy)
+        - [Value Function](#value-function)
+        - [Optimal Value and Policy](#optimal-value-and-policy)
+    - [Markov Decision Processes](#markov-decision-processes)
+    - [Bellman Equations](#bellman-equations)
+        - [Bellman Expectation Equations](#bellman-expectation-equations)
+        - [Bellman Optimality Equations](#bellman-optimality-equations)
+- [Common Approaches](#common-approaches)
+    - [Dynamic Programming](#dynamic-programming)
+        - [Policy Evaluation](#policy-evaluation)
+        - [Policy Improvement](#policy-improvement)
+        - [Policy Iteration](#policy-iteration)
+    - [Monte-Carlo Methods](#monte-carlo-methods)
+    - [Temporal-Difference Learning](#temporal-difference-learning)
+        - [Bootstrapping](#bootstrapping)
+        - [Value Estimation](#value-estimation)
+        - [SARSA: On-Policy TD control](#sarsa-on-policy-td-control)
+        - [Q-Learning: Off-policy TD control](#q-learning-off-policy-td-control)
+        - [Deep Q-Network](#deep-q-network)
+    - [Combining TD and MC Learning](#combining-td-and-mc-learning)
+    - [Policy Gradient](#policy-gradient)
+        - [Policy Gradient Theorem](#policy-gradient-theorem)
+        - [REINFORCE](#reinforce)
+        - [Actor-Critic](#actor-critic)
+        - [A3C](#a3c)
+    - [Evolution Strategies](#evolution-strategies)
+- [Known Problems](#known-problems)
+    - [Exploration-Exploitation Dilemma](#exploration-exploitation-dilemma)
+    - [Deadly Triad Issue](#deadly-triad-issue)
+- [Case Study: AlphaGo Zero](#case-study-alphago-zero)
+- [References](#references)
+
+<!-- /TOC -->
+
+
 
 A couple of exciting news in Artificial Intelligence (AI) has just happened in recent years.  AlphaGo defeated the best professional human player in the game of Go. Very soon the extended algorithm AlphaGo Zero beat AlphaGo by 100-0 without supervised learning on human knowledge. Top professional game players lost to the bot developed by OpenAI on DOTA2 1v1 competition. After knowing these, it is pretty hard not to be curious about the magic behind these algorithms --- Reinforcement Learning (RL). I'm writing this post to briefly go over the field. We will first introduce several fundamental concepts and then dive into classic approaches to solving RL problems. Hopefully, this post could be a good starting point for newbies, bridging the future study on the cutting-edge research.
 
@@ -162,6 +200,7 @@ Or in other words, the future and the past are **conditionally independent** giv
 
 
 ![Agent-Environment Interaction in MDP](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/agent_environment_MDP.png)
+
 *Fig. 3. The agent-environment interaction in a Markov decision process. (Image source: Sec. 3.1 Sutton & Barto (2017).)*
 
 
@@ -175,6 +214,7 @@ In an unknown environment, we do not have perfect knowledge about $P$ and $R$.
 
 
 ![MDP example](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/mdp_example.jpg)
+
 *Fig. 4. A fun example of Markov decision process: a typical work day. (Image source: [randomant.net/reinforcement-learning-concepts](https://randomant.net/reinforcement-learning-concepts/))*
 
 
@@ -209,6 +249,7 @@ The recursive update process can be further decomposed to be equations built on 
 
 
 ![Bellman](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/bellman_equation.png)
+
 *Fig. 5. Illustration of how Bellman expection equations update state-value and action-value functions.*
 
 
@@ -374,6 +415,7 @@ The development of Q-learning ([Watkins & Dayan, 1992](https://link.springer.com
 The first two steps are same as in SARSA. In step 3., Q-learning does not follow the current policy to pick the second action but rather estimate $Q_*$ out of the best Q values independently of the current policy.
 
 ![SARSA and Q-learning](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/sarsa_vs_q_learning.png)
+
 *Fig. 6. The backup diagrams for Q-learning and SARSA. (Image source: Replotted based on Figure 6.5 in Sutton & Barto (2017))*
 
 
@@ -399,6 +441,7 @@ In addition, it is also found to be helpful to clip the error term to be between
 
 
 ![DQN algorithm](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/DQN_algorithm.png)
+
 *Fig. 7. Algorithm for DQN with experience replay and occasionally frozen optimization target. The prepossessed sequence is the output of some processes running on the input images of Atari games. Don't worry too much about it; just consider them as input feature vectors. (Image source: Mnih et al. 2015)* 
 
 
@@ -429,7 +472,6 @@ $$
 
 ![TD lambda](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/TD_lambda.png)
 
-
 We are free to pick any $n$ in TD learning as we like. Now the question becomes what is the best $n$? Which $G_t^{(n)}$ gives us the best return approximation? A common yet smart solution is to apply a weighted sum of all possible n-step TD targets rather than to pick a single best n. The weights decay by a factor λ with n, $\lambda^{n-1}$; the intuition is similar to [why](#value-estimation) we want to discount future rewards when computing the return: the more future we look into the less confident we would be. To make all the weight (n → ∞) sum up to 1, we multiply every weight by (1-λ), because:
 
 $$
@@ -445,6 +487,7 @@ This weighted sum of many n-step returns is called λ-return $G_t^{\lambda} = (1
 
 
 ![Backup diagrams](https://raw.githubusercontent.com/lilianweng/lil-log/master/assets/images/TD_MC_DP_backups.png)
+
 *Fig. 8. Comparison of the backup diagrams of Monte-Carlo, Temporal-Difference learning, and Dynamic Programming for state value functions. (Image source: David Silver's RL course [lecture 4](http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching_files/MC-TD.pdf): "Model-Free Prediction")*
 
 
@@ -608,6 +651,7 @@ $$
 
 
 ![EA](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/EA_RL_parallel.png)
+
 *Fig. 9. A simple parallel evolution-strategies-based RL algorithm. Parallel workers share the random seeds so that they can reconstruct the Gaussian noises with tiny communication bandwidth. (Image source: Salimans et al. 2017.)*
 
 
@@ -636,6 +680,7 @@ We do seek the efficiency and flexibility of TD methods that involve bootstrappi
 The game of [Go](https://en.wikipedia.org/wiki/Go_(game)) has been an extremely hard problem in the field of Artificial Intelligence for decades until recent years. AlphaGo and AlphaGo Zero are two programs developed by a team at DeepMind. Both involve deep Convolutional Neural Networks ([CNN]({{ site.baseurl }}{% post_url 2017-12-15-object-recognition-for-dummies-part-2 %}#cnn-for-image-classification)) and Monte Carlo Tree Search (MCTS) and both have been approved to achieve the level of professional human Go players. Different from AlphaGo that relied on supervised learning from expert human moves, AlphaGo Zero used only reinforcement learning and self-play without human knowledge beyond the basic rules.
 
 ![Go game board](https://raw.githubusercontent.com/lilianweng/lil-log/master/assets/images/go_config.png)
+
 *Fig. 10. The board of Go. Two players play black and white stones alternatively on the vacant intersections of a board with 19 x 19 lines. A group of stones must have at least one open point (an intersection, called a "liberty") to remain on the board and must have at least two or more enclosed liberties (called "eyes") to stay "alive". No stone shall repeat a previous position.*
 
 With all the knowledge of RL above, let's take a look at how AlphaGo Zero works. The main component is a deep [CNN]({{ site.baseurl }}{% post_url 2017-12-15-object-recognition-for-dummies-part-2 %}#cnn-for-image-classification) over the game board configuration (precisely, a [ResNet]({{ site.baseurl }}{% post_url 2017-12-15-object-recognition-for-dummies-part-2 %}#resnet-he-et-al-2015) with batch normalization and ReLU). This network outputs two values:
@@ -652,7 +697,7 @@ During self-play, MCTS further improves the action probability distribution $\pi
 
 
 ![AlphaGo Zero training](https://raw.githubusercontent.com/lilianweng/lil-log/master//assets/images/alphago-zero-selfplay.png)
-{: class="center"}
+
 *Fig. 11. AlphaGo Zero is trained by self-play while MCTS improves the output policy further in every step. (Image source: Figure 1a in Silver et al., 2017).*
 
 The network is trained with the samples in the replay memory to minimize the loss:
